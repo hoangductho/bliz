@@ -23,6 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @link            https://github.com/hoangductho
  */
 class Database extends CI_Controller {
+    public $layout = 'myLayout';
 
     /**
      * Connection database
@@ -35,7 +36,7 @@ class Database extends CI_Controller {
             include(APPPATH . 'config/database.php');
             $pdo = new PDO($db['default']['hostname'], $db['default']['username'], $db['default']['password']);
         } catch (Exception $ex) {
-            $this->load->view();
+            $this->load->render();
             var_dump($ex);
         }
     }

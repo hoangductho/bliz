@@ -53,4 +53,4 @@ $route['default_controller'] = 'setup/main';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-$route['setup'] = 'setup/main';
+$route['setup'] = 'setup/database';
