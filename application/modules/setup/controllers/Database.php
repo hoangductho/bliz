@@ -36,8 +36,8 @@ class Database extends CI_Controller {
             include(APPPATH . 'config/database.php');
             $pdo = new PDO($db['default']['hostname'], $db['default']['username'], $db['default']['password']);
         } catch (Exception $ex) {
-            $this->load->render();
-            var_dump($ex);
+            $this->load->render('database');
+//            var_dump($ex);
         }
     }
 

@@ -5,6 +5,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+?>
 
-class MY_Controller extends CI_Controller {
-}
+<h1>Hello World</h1>
