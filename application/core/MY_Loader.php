@@ -30,6 +30,31 @@ class MY_Loader extends HMVC_Loader {
     public function get_layout() {
         return $this->layout;
     }
+    
+    /**
+     * Get module path
+     * 
+     * @return string path of modles
+     */
+    public function modulePath() {
+        $module = null;
+        $traceback = debug_backtrace();
+        
+        foreach ($traceback as $element) {
+            if ($element['file'] !== __FILE__) {
+                $path = $element['file'];
+                if (strpos($path, MODPATH) !== FALSE) {
+                    $trace = explode('/', str_replace(MODPATH, '', $path));
+                    $module = MODPATH . $trace[0] . DIRECTORY_SEPARATOR;
+                } else {
+                    $module = APPPATH;
+                }
+                break;
+            }
+        }
+        
+        return $module;
+    }
 
     /**
      * Get view directory path
@@ -39,22 +64,7 @@ class MY_Loader extends HMVC_Loader {
      * @return string view directory path
      */
     private function _viewpath() {
-        $viewpath = null;
-
-        $traceback = debug_backtrace();
-        
-        foreach ($traceback as $element) {
-            if ($element['file'] !== __FILE__) {
-                $path = $element['file'];
-                if (strpos($path, MODPATH) !== FALSE) {
-                    $trace = explode('/', str_replace(MODPATH, '', $path));
-                    $viewpath = MODPATH . $trace[0] . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR;
-                } else {
-                    $viewpath = APPPATH . 'views' . DIRECTORY_SEPARATOR;
-                }
-                break;
-            }
-        }
+        $viewpath = $this->modulePath() . 'views' . DIRECTORY_SEPARATOR;
 
         return $viewpath;
     }
@@ -94,7 +104,7 @@ class MY_Loader extends HMVC_Loader {
         
         $layout = 'layout' . DIRECTORY_SEPARATOR . $layout;
         
-        $input['contentHTML'] = parent::view($view, $data, TRUE);
+        $input['contentHtml'] = parent::view($view, $data, TRUE);
         
         return $this->load->view($layout, $input, $return);
     }

@@ -23,7 +23,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @link            https://github.com/hoangductho
  */
 class Database extends CI_Controller {
+
     public $layout = 'myLayout';
+
+    /**
+     * Contruct class
+     */
+    public function __construct() {
+        parent::__construct();
+        $this->load->helper('url');
+        $this->load->set_layout('setup');
+    }
 
     /**
      * Connection database
@@ -32,13 +42,32 @@ class Database extends CI_Controller {
      * 
      */
     public function index() {
-        try {
+        $default = array();
+        $post = filter_input(INPUT_POST, 'default', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        if (!empty($post)) {
+            $default = $post;
+        } else {
             include(APPPATH . 'config/database.php');
-            $pdo = new PDO($db['default']['hostname'], $db['default']['username'], $db['default']['password']);
+            $default = $db[$active_group];
+        }
+        try {
+//            $driver = $default['dbdriver'];
+//            if ($driver == 'mysqli') {
+//                $driver = 'mysql';
+//            }
+//            $dsn = "{$driver}:host={$default['hostname']};dbname={$default['database']};charset={$default['char_set']}";
+//            $pdo = new PDO($dsn, $default['username'], $default['password']);
+//            var_dump($this->load->database());
+            var_dump($this->load->database());
+            echo 'OK';
         } catch (Exception $ex) {
-            $this->load->render('database');
-//            var_dump($ex);
+            $data['errmsg'] = $ex->getMessage();
+            $data['db']['default'] = $default;
+            $this->load->render('database', $data);
         }
     }
 
+    /**
+     * 
+     */
 }

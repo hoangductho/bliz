@@ -6,5 +6,4 @@
  * and open the template in the editor.
  */
 
-class MY_Controller extends CI_Controller {
-}
+date_default_timezone_set('UTC');
