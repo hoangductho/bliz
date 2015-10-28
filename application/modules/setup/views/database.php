@@ -22,8 +22,8 @@ $show = array('hostname', 'username', 'password', 'database', 'dbdriver');
             <div class="setup-form-section <?php echo (!in_array($key, $show) ? 'hide' : null); ?>" <?php echo (!in_array($key, $show) ? 'hidden' : null); ?>>
                 <div class="setup-section-label"><?php echo $key ?></div>
                 <div class="form-radiobox">
-                    <input type="radio" name="default[<?php echo $key ?>]" value="true" <?php echo ($value ? 'checked' : null) ?>/> True
-                    <input type="radio" name="default[<?php echo $key ?>]" value="false" <?php echo (!$value ? 'checked' : null) ?>/> False
+                    <input type="radio" name="default[<?php echo $key ?>]" value="boolean_true" <?php echo ($value ? 'checked' : null) ?>/> True
+                    <input type="radio" name="default[<?php echo $key ?>]" value="boolean_false" <?php echo (!$value ? 'checked' : null) ?>/> False
                 </div>
             </div>
             <?php

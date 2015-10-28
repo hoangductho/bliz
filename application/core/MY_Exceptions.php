@@ -64,7 +64,8 @@ class My_Exceptions extends CI_Exceptions
             $message = "Hi&#x1EC7;n t&#x1EA1;i có quá nhi&#x1EC1;u yêu c&#x1EA7;u g&#x1EED;i t&#x1EDB;i cùng lúc làm máy ch&#x1EE7; &#x111;ang quá t&#x1EA3;i. Xin b&#x1EA1;n vui lòng t&#x1EA3;i l&#x1EA1;i trang (<b>&#x1EA5;n nút F5</b>) sau giây lát.<br /> 
             Thành th&#x1EAD;t xin l&#x1ED7;i b&#x1EA1;n vì s&#x1EF1; phi&#x1EC1;n hà này, r&#x1EA5;t mong b&#x1EA1;n thông c&#x1EA3;m."; 
         } 
-        return parent::show_error($heading, $message, $template, $status_code);//Trả về nội dung để hiển thị cho lỗi tương ứng 
+        return $message;
+//        return parent::show_error($heading, $message, $template, $status_code);//Trả về nội dung để hiển thị cho lỗi tương ứng 
     } 
 
 }

@@ -51,15 +51,21 @@ class Database extends CI_Controller {
             $default = $db[$active_group];
         }
         try {
-//            $driver = $default['dbdriver'];
-//            if ($driver == 'mysqli') {
-//                $driver = 'mysql';
-//            }
-//            $dsn = "{$driver}:host={$default['hostname']};dbname={$default['database']};charset={$default['char_set']}";
-//            $pdo = new PDO($dsn, $default['username'], $default['password']);
-//            var_dump($this->load->database());
-            var_dump($this->load->database());
-            echo 'OK';
+            set_error_handler('var_dump', 0);
+            $this->load->database($default);
+            restore_error_handler();
+            
+            if(($err = error_get_last())) {
+                $data['errmsg'] = $err['message'];
+                $data['db']['default'] = $default;
+                $this->load->render('database', $data);
+            }else {
+                if(!empty($post)) {
+                    $this->_rewriteDatabaseConfig($default);
+                    echo 'OK';
+                }
+            }
+            
         } catch (Exception $ex) {
             $data['errmsg'] = $ex->getMessage();
             $data['db']['default'] = $default;
@@ -68,6 +74,74 @@ class Database extends CI_Controller {
     }
 
     /**
+     * Rewrite database config file
      * 
+     * @link application/config/database.php database config file path
+     * 
+     * @access protected
+     * 
+     * @param array $database database config info
+     * 
+     * @return bool Result rewrite
      */
+    protected function _rewriteDatabaseConfig ($database) {
+        $configFile = APPPATH . 'config/database.php';
+        
+        include($configFile);
+        $file = fopen($configFile, 'r');
+        $replace = FALSE;
+        $content = null;
+        
+        while (!feof($file)) {
+            $line = fgets($file);
+            
+            if(strpos($line, ');') !==false && $replace) {
+                $replace = FALSE;
+            }
+            
+            if(!$replace) {
+                $content .= $line;
+            }else {
+                $newline = $this->_replaceConfigValue($line, $database);
+                $content .= $newline;
+            }
+            
+            if(strpos($line, '$db[\''.$active_group.'\']') !==false ){
+                $replace = TRUE;
+            }   
+        }
+        fclose($file);
+        
+        file_put_contents($configFile, $content);
+    }
+    
+    /**
+     * Replace config value
+     * 
+     * @access protected
+     * 
+     * @param string $line line need replace
+     * 
+     * @param array $config list new config
+     * 
+     * @return string line after replace
+     */
+    protected function _replaceConfigValue($line, $config) {
+        $current = explode('=>', $line);
+        
+        $index = trim(str_replace('\'', null, $current[0]));
+        
+        if(isset($config[$index])) {
+            if($config[$index] == 'boolean_true' || $config[$index] == 'boolean_false') {
+                $bool = explode('_', $config[$index]);
+                $current[1] = ($bool[1]=='true'?'TRUE':'FALSE') . ',' . PHP_EOL;
+            }else {
+                $current[1] = '\'' . $config[trim(str_replace('\'', null, $current[0]))] . '\',' . PHP_EOL;
+            }
+            
+            return implode('=>', $current);
+        }else {
+            return $line;
+        }
+    }
 }
