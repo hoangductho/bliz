@@ -2,6 +2,9 @@
 /* @var $this Controller */
 $modcss = 'css/setupmod.css';
 
+// load helper url to using url default
+$this->load->helper('url');
+
 $setupCssPath = APPPATH . $modcss;
 if (file_exists($setupCssPath)) {
     try {
@@ -35,7 +38,7 @@ copy($source_css, $setupCssPath);
                 Setup Blog Application
             </div><!-- header -->
 
-            <div id='setup-content'>
+            <div id='content'>
                 <?php echo $contentHtml; ?>
             </div>
 

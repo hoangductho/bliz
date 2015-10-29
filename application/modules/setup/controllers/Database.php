@@ -51,6 +51,7 @@ class Database extends CI_Controller {
             $default = $db[$active_group];
         }
         try {
+            ini_set('display_errors', 0);
             set_error_handler('var_dump', 0);
             $this->load->database($default);
             restore_error_handler();
@@ -62,8 +63,9 @@ class Database extends CI_Controller {
             }else {
                 if(!empty($post)) {
                     $this->_rewriteDatabaseConfig($default);
-                    echo 'OK';
                 }
+                
+                redirect('/setup/table');
             }
             
         } catch (Exception $ex) {
@@ -72,7 +74,7 @@ class Database extends CI_Controller {
             $this->load->render('database', $data);
         }
     }
-
+    
     /**
      * Rewrite database config file
      * 

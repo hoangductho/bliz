@@ -41,7 +41,7 @@ class My_Exceptions extends CI_Exceptions
         $text = ""; 
         $text .= "\n>>> FOUND ERROR at $date <<<"; 
         $text .= "\n\t\tHeading: $heading"; 
-        $text .= "\n\t\tMessage: " . $message[0]; 
+        $text .= "\n\t\tMessage: " . implode('\n\t\t', $message); 
         $text .= "\n\t\tError code: $template"; 
         $text .= "\n\t\tError number: $status_code"; 
         $text .= "\n\t\tServer info: " . var_export($_SERVER, true); 

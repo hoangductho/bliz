@@ -23,10 +23,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @link            https://github.com/hoangductho
  */
 class SetupModel extends CI_Model {
+
     /**
      * Class Constructor
      */
     public function __construct() {
         parent::__construct();
+        $this->load->database();
     }
+
+    /**
+     * Create Tables
+     * 
+     * @param query create table
+     * 
+     * @return bool insert result
+     */
+    public function createTable($query) {
+        $this->db->simple_query($query);
+        return $this->db->error();
+    }
+
 }
