@@ -64,8 +64,10 @@ class Database extends CI_Controller {
                 if(!empty($post)) {
                     $this->_rewriteDatabaseConfig($default);
                 }
-                
-                redirect('/setup/table');
+
+//                redirect('/setup/table');
+
+                redirect(self::demo());
             }
             
         } catch (Exception $ex) {
@@ -73,6 +75,10 @@ class Database extends CI_Controller {
             $data['db']['default'] = $default;
             $this->load->render('database', $data);
         }
+    }
+
+    public static function demo() {
+        echo 'Welcome to Demo page';
     }
     
     /**
