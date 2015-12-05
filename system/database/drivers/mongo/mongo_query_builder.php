@@ -1048,7 +1048,7 @@ class Mongo_query_builder extends CI_DB {
      * @param    string
      * @return    int
      */
-    public function count_all_results($table = '')
+    public function count_all_results($table = '', $reset = true)
     {
         // query database
         $result = $this->get($table);

@@ -22,7 +22,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author          Tho Hoang
  * @link            https://github.com/hoangductho
  */
-class Table extends CI_Controller {
+class Create extends CI_Controller {
 
     /**
      * list tables default of system
@@ -36,8 +36,7 @@ class Table extends CI_Controller {
      */
     public function __construct() {
         parent::__construct();
-        include_once modulePath() . 'config/tables.php';
-        $this->tables = $mysql;
+        $this->tables = include_once modulePath() . 'config/tables.php';
         $this->load->model('SetupModel');
         $this->load->set_layout('setup');
     }
@@ -47,22 +46,27 @@ class Table extends CI_Controller {
      * 
      * @todo check tables list in database and create new table if not exists
      */
-    public function index() {
+    public function table() {
         $post = filter_input(INPUT_POST, 'create', FILTER_DEFAULT, FILTER_VALIDATE_INT);
         $error = null;
         
         if (!empty($post) && $post) {
             foreach ($this->tables as $name => $query) {
-                $create = $this->SetupModel->createTable($query);
+                if($this->SetupModel->db->dbdriver == 'mongo') {
+                    $create = $this->SetupModel->createCollection($name);
+                }else {
+                    $create = $this->SetupModel->createTable($query);
+                }
+
                 if ($create['code']) {
                     $create['heading'] = "Create table $name error";
                     $error[] = $create;
                 }
             }
-            var_dump($error);
+
             if (empty($error)) {
-                redirect('/setup/account');
-            } 
+                redirect('/setup/create/account');
+            }
         }
 
         $data['tables'] = array_keys($this->tables);
@@ -70,4 +74,8 @@ class Table extends CI_Controller {
         $this->load->render('table', $data);
     }
 
+    public function account() {
+        var_dump(getallheaders(), apache_request_headers());
+        var_dump($_SERVER);
+    }
 }

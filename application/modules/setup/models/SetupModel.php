@@ -44,4 +44,32 @@ class SetupModel extends CI_Model {
         return $this->db->error();
     }
 
+    /**
+     * Mongo Create Collection
+     *
+     * @param string    $collection     name of collection
+     * @param array     $config         config info
+     *
+     * @return Object
+     */
+    public function createCollection($collection, $config = array()) {
+        $create = $this->db->db->createCollection($collection, $config);
+
+        $result['code'] = !$create->w;
+        $result['Object'] = $create;
+
+        return $result;
+    }
+
+    /**
+     * Insert Data Into Table
+     *
+     * @param string $table table will be insert
+     * @param array $data data will be inputed
+     *
+     * @return array result insert
+     */
+    public function InsertData($table, $data) {
+        $this->db->insert($table, $data);
+    }
 }

@@ -76,10 +76,10 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=>'',
 	'hostname' =>'localhost',
-	'username' =>'root',
-	'password' =>'abcd1234',
+	'username' =>'bliz',
+	'password' =>'12345678',
 	'database' =>'bliz',
-	'dbdriver' =>'mysqli',
+	'dbdriver' =>'mongo',
 	'dbprefix' =>'',
 	'pconnect' =>FALSE,
 //	'db_debug' => (ENVIRONMENT !== 'production'),

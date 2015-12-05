@@ -31,7 +31,6 @@ class Database extends CI_Controller {
      */
     public function __construct() {
         parent::__construct();
-        $this->load->helper('url');
         $this->load->set_layout('setup');
     }
 
@@ -65,9 +64,7 @@ class Database extends CI_Controller {
                     $this->_rewriteDatabaseConfig($default);
                 }
 
-//                redirect('/setup/table');
-
-                redirect(self::demo());
+                redirect('/setup/create/table');
             }
             
         } catch (Exception $ex) {

@@ -55,3 +55,4 @@ $mysql['RoleAccount'] =
         . 'FOREIGN KEY (rid) REFERENCES Role(id)'
         . ');';
 
+return $mysql;
