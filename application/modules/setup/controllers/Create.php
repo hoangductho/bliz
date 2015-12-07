@@ -53,7 +53,7 @@ class Create extends CI_Controller {
         if (!empty($post) && $post) {
             foreach ($this->tables as $name => $query) {
                 if($this->SetupModel->db->dbdriver == 'mongo') {
-                    $create = $this->SetupModel->createCollection($name);
+                    $create = $this->SetupModel->createCollection($name, $query);
                 }else {
                     $create = $this->SetupModel->createTable($query);
                 }

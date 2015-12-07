@@ -55,4 +55,14 @@ $mysql['RoleAccount'] =
         . 'FOREIGN KEY (rid) REFERENCES Role(id)'
         . ');';
 
-return $mysql;
+$mongo = array(
+    'account' => array(),
+    'sesssion' => array(),
+    'log' => array(),
+    'data' => array(),
+    'data_structure' => array(),
+    'data_record' => array(),
+    'data_collection' => array(),
+    'data' => array());
+
+return $mongo;
