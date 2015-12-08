@@ -213,6 +213,6 @@ class BLFilter {
      * @param mixed $shared     set options into $this->options to shared with other functions
      */
     public function validate($variable, $options, $shared) {
-        
+
     }
 }
