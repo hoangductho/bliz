@@ -78,4 +78,25 @@ class Create extends CI_Controller {
         var_dump(getallheaders(), apache_request_headers());
         var_dump($_SERVER);
     }
+
+    public function regexp($string) {
+        $options = array(
+            'prefix' => 'abc',
+            'suffix' => '@vienvong.vn',
+            'modifier' => 'um',
+            'min_length' => 4,
+            'max_length' => 9,
+        );
+
+        $BLFilter = new BLFilter($options);
+        $filter = $BLFilter->regular();
+
+        if($filter['ok']) {
+            $options['regexp'] = $filter['data'];
+            $regexp = array('options' => $options);
+            var_dump($filter['data'], filter_var($string.'@vienvong.com', FILTER_VALIDATE_EMAIL, $regexp));
+        }else {
+            var_dump($filter);
+        }
+    }
 }
