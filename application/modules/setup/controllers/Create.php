@@ -31,6 +31,8 @@ class Create extends CI_Controller {
      */
     public $tables;
 
+    // -------------------------------------------------------------------------
+
     /**
      * Function Contructor
      */
@@ -40,6 +42,8 @@ class Create extends CI_Controller {
         $this->load->model('SetupModel');
         $this->load->set_layout('setup');
     }
+
+    // -------------------------------------------------------------------------
 
     /**
      * Setup Table Processing
@@ -74,27 +78,38 @@ class Create extends CI_Controller {
         $this->load->render('table', $data);
     }
 
+    // -------------------------------------------------------------------------
+
+    /**
+     * Create Admin Account
+     *
+     * @method Post
+     *
+     * @redirect Login page
+     */
     public function account() {
         var_dump(getallheaders(), apache_request_headers());
         var_dump($_SERVER);
     }
 
+    // -------------------------------------------------------------------------
+
     public function regexp($string) {
         $options = array(
-            'prefix' => 'abc',
+//            'prefix' => 'abc',
             'suffix' => '@vienvong.vn',
-            'modifier' => 'um',
+//            'modifier' => 'um',
+            'validate_constant' => array(FILTER_VALIDATE_EMAIL, FILTER_VALIDATE_REGEXP),
             'min_length' => 4,
-            'max_length' => 9,
+//            'max_length' => 9,
+            'min_range' => 125
         );
 
         $BLFilter = new BLFilter($options);
-        $filter = $BLFilter->regular();
+        $filter = $BLFilter->regularString();
 
         if($filter['ok']) {
-            $options['regexp'] = $filter['data'];
-            $regexp = array('options' => $options);
-            var_dump($filter['data'], filter_var($string.'@vienvong.com', FILTER_VALIDATE_EMAIL, $regexp));
+            var_dump($BLFilter->validate($string.'@vienvong.vn'));
         }else {
             var_dump($filter);
         }

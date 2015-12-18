@@ -6,11 +6,14 @@
  *
  * Class Bliz Filter
  *
- * @Description: Declare all function filter of Bliz site
+ * @Description:
+ *      - Declare all function filter of Bliz site
+ *      - All public function return data follow structure: array('ok' => bool, 'errmsg' => '', 'data' =>'');
  *
  * @Property:
  *      - regexp    string      regular expression string
  *      - options   array       list options to filter
+ *
  */
 
 class BLFilter {
@@ -32,7 +35,7 @@ class BLFilter {
      *   - length               int         length of validated string. Disable max_length and min_length
      *   - match                string      match string to validate using regular expression
      *   - required             bool        allow null of not null
-     *   - validate_constant    array       PHP 5 Predefined Filter Constants
+     *   - validate_constants    array       PHP 5 Predefined Filter Constants
      *   - input_constant       mixed       PHP 5 Predefined Input Constants
      *   - max_range            int/float   maximum value of number. Only with filter_constants =  FILTER_VALIDATE_INT=257 | FILTER_VALIDATE_FLOAT=259
      *   - min_range            int/float   minimum value of number. Only with filter_constants =  FILTER_VALIDATE_INT=257 | FILTER_VALIDATE_FLOAT=259
@@ -147,7 +150,7 @@ class BLFilter {
      *
      * @return array('ok' => bool, 'errmsg' => '', 'data' =>'')
      */
-    public function regularString($options = array(), $shared = false) {
+    public function regularString($options = array(), $shared = true) {
         $regexp = array('prefix' => '/', 'body' => '', 'suffix' => '/', 'modifier'=>'');
         $length = '';
 
@@ -191,8 +194,9 @@ class BLFilter {
             $regexp['body'] = $options['match'].$length;
 
             if($shared) {
-                $this->options = $options;
                 $this->regexp = implode('',$regexp);
+                $options['regexp'] = $this->regexp;
+                $this->options = $options;
             }
 
             return array('ok' => 1, 'errmsg' => '', 'data' => implode('', $regexp));
@@ -211,8 +215,43 @@ class BLFilter {
      * @param mixed $variable   data needed validate
      * @param mixed $options    options to validate data
      * @param mixed $shared     set options into $this->options to shared with other functions
+     *
+     * @return array('ok' => bool, 'errmsg' => '', 'data' => '');
      */
-    public function validate($variable, $options, $shared) {
+    public function validate($variable, $options = array(), $shared = true) {
+        if(!empty($options)) {
+            $this->regularString($options, $shared);
+        }
 
+        $options = $this->options;
+
+        if(!empty($options)) {
+            if(isset($options['required']) && $options['required'] && empty($variable)) {
+                return array('ok' => 0, 'errmsg' => 'Data is not null', 'data' => '');
+            }
+
+            if(!empty($options['validate_constant'])) {
+                if(is_int($options['validate_constant'])) {
+                    if(!($filter = filter_var($variable,$options['validate_constant'], array('options' => $options))) === false) {
+                        return array('ok' => 1, 'errmsg' => '', 'data' => $filter);
+                    }else {
+                        return array('ok' => 0, 'errmsg' => "'$variable' invalid with options define as ".print_r($options, true), 'data' => $filter);
+                    }
+                }elseif(is_array($options['validate_constant'])) {
+                    foreach ($options['validate_constant'] as $constant) {
+                        if(!($filter = filter_var($variable,$constant, array('options' => $options))) !== false) {
+                            return array('ok' => 0, 'errmsg' => "'$variable' invalid with validate_constant=$constant in options define as ".print_r($options, true), 'data' => $filter);
+                        }
+                    }
+                    return array('ok' => 1, 'errmsg' => '', 'data' => $filter);
+                }else {
+                    return array('ok' => 0, 'errmsg' => 'Validate Type invalid', 'data' => '');
+                }
+            }else {
+                return array('ok' => 0, 'errmsg' => 'Validate Type is not set', 'data' => '');
+            }
+        }else {
+            return array('ok' => 0, 'errmsg' => 'Options is not set', 'data' => '');
+        }
     }
 }
